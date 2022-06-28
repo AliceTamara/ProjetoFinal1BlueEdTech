@@ -19,16 +19,22 @@ namespace ProjetoFinal1BlueEdTech.Controllers
         [HttpGet]
         public async Task<List<Turma>> ConsultarTodas()
         {
-            return await _context.Turmas.ToListAsync();
+            var turmas = await _context.Turmas.ToListAsync();
+            return turmas.Where(_ => _.Ativo).ToList();
         }
         
         [HttpGet("{id}")]
         public async Task<Turma> ConsultarPeloId(int id)
         {
-            return await _context.Turmas.FindAsync(id);
+            var turma = await _context.Turmas.FindAsync(id);
+
+            if (turma != null && turma.Ativo)
+                return turma;
+
+            return null;
         }
         
-        [HttpPost()]
+        [HttpPost]
         public async Task<IActionResult> Incluir(Turma turma)
         {
             _context.Turmas.Add(turma);
@@ -41,7 +47,11 @@ namespace ProjetoFinal1BlueEdTech.Controllers
         public async Task<IActionResult> Excluir(int id)
         {
             var turma = await _context.Turmas.FindAsync(id);
-        
+            var existemAlunosNessaTurma = (_context.Alunos?.Any(e => e.TurmaId == id)).GetValueOrDefault();
+
+            if (turma == null || existemAlunosNessaTurma)
+                return StatusCode(StatusCodes.Status406NotAcceptable);
+            
             _context.Turmas.Remove(turma);
             await _context.SaveChangesAsync();
         
@@ -51,6 +61,10 @@ namespace ProjetoFinal1BlueEdTech.Controllers
         [HttpPut]
         public async Task<IActionResult> Atualizar(Turma turma)
         {
+            var turmaExiste = (_context.Turmas?.Any(e => e.Id == turma.Id)).GetValueOrDefault();
+            if (!turmaExiste)
+                return NoContent();
+            
             _context.Entry(turma).State = EntityState.Modified;
         
             await _context.SaveChangesAsync();

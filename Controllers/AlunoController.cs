@@ -19,18 +19,27 @@ namespace ProjetoFinal1BlueEdTech.Controllers
         [HttpGet]
         public async Task<List<Aluno>> ConsultarTodas()
         {
-            return await _context.Alunos.ToListAsync();
+            var alunos = await _context.Alunos.ToListAsync();
+            return alunos.Where(_ => _.Ativo).ToList();
         }
 
         [HttpGet("{id}")]
         public async Task<Aluno> ConsultarPeloId(int id)
         {
-            return await _context.Alunos.FindAsync(id);
+            var aluno = await _context.Alunos.FindAsync(id);
+
+            if (aluno != null && aluno.Ativo)
+                return aluno;
+
+            return null;
         }
 
-        [HttpPost()]
+        [HttpPost]
         public async Task<IActionResult> Incluir(Aluno aluno)
         {
+            if (aluno.TurmaId == 0)
+                return BadRequest();
+
             _context.Alunos.Add(aluno);
             await _context.SaveChangesAsync();
 
@@ -41,6 +50,11 @@ namespace ProjetoFinal1BlueEdTech.Controllers
         public async Task<IActionResult> Excluir(int id)
         {
             var aluno = await _context.Alunos.FindAsync(id);
+
+            if (aluno == null)
+            {
+                return StatusCode(StatusCodes.Status406NotAcceptable);
+            }
 
             _context.Alunos.Remove(aluno);
             await _context.SaveChangesAsync();
