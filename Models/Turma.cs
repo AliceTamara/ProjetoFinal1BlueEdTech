@@ -2,7 +2,7 @@
 
 namespace ProjetoFinal1BlueEdTech.Models
 {
-    [Table("Turma", Schema = "dbo")]
+    [Table("Turma")]
     public class Turma
     {
         public int Id { get; set; }
