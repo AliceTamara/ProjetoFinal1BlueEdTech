@@ -8,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddDbContext<EscolaContext>(options =>
-    options.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=escola;Trusted_Connection=True;MultipleActiveResultSets=true"));
+    options.UseSqlServer("Server=tcp:escola-coding-girls.database.windows.net,1433;Initial Catalog=escola;Persist Security Info=False;User ID=AliceTamara;Password=Ju835600;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"));
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

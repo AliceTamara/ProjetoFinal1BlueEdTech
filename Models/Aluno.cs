@@ -2,7 +2,7 @@
 
 namespace ProjetoFinal1BlueEdTech.Models
 {
-    [Table("Aluno", Schema = "dbo")]
+    [Table("Aluno")]
     public class Aluno
     {
         [Column("Data_Nascimento")]
@@ -16,7 +16,7 @@ namespace ProjetoFinal1BlueEdTech.Models
         public int TotalFaltas { get; set; }
 
         public int Id { get; set; }
-        public string Nome { get; set; }
+        public string? Nome { get; set; }
         public Char Sexo { get; set; }
         public bool Ativo { get; set; }
     }

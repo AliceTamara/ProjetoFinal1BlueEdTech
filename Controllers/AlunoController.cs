@@ -26,6 +26,7 @@ namespace ProjetoFinal1BlueEdTech.Controllers
         [HttpGet("{id}")]
         public async Task<Aluno> ConsultarPeloId(int id)
         {
+            var alunos = _context.Alunos.ToList();
             var aluno = await _context.Alunos.FindAsync(id);
 
             if (aluno != null && aluno.Ativo)
